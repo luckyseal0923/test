@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>狀態看板 / 下載</title>
+    <link rel="stylesheet" href="/assets/shared.css" />
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="topbar">
+        <div class="brand">
+          <div class="title">狀態看板</div>
+          <div id="docPill" class="pill mono"></div>
+        </div>
+        <div class="row">
+          <a class="btn" href="/">回到上傳</a>
+          <a id="configLink" class="btn" href="#">設定簽名框</a>
+        </div>
+      </div>
+
+      <div class="grid">
+        <div class="card">
+          <h2>文件狀態</h2>
+          <div class="row">
+            <div class="pill"><b>狀態</b> <span id="status" class="mono"></span></div>
+            <div class="pill"><b>必填進度</b> <span id="progress" class="mono"></span></div>
+          </div>
+          <div class="hr"></div>
+          <div class="row">
+            <a id="dlOriginal" class="btn" href="#">下載原始 PDF</a>
+            <a id="dlSigned" class="btn ok" href="#" style="display:none">下載已簽名 PDF</a>
+            <span id="dlHint" class="muted small"></span>
+          </div>
+          <div class="hr"></div>
+          <h2>簽名者連結（分享給同仁）</h2>
+          <div class="linkline">
+            <div class="url mono" id="signerUrl"></div>
+            <div class="row">
+              <a id="openSigner" class="btn" target="_blank" rel="noopener">開啟</a>
+              <button id="copySigner" class="btn" type="button">複製</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>欄位明細</h2>
+          <div id="fieldList" class="col"></div>
+          <div class="hr"></div>
+          <h2>自動化（Webhook，可選）</h2>
+          <div class="col">
+            <label>完成時 POST JSON 到此網址</label>
+            <input id="webhookUrl" class="input" placeholder="https://..." />
+            <div class="row">
+              <button id="saveWebhook" class="btn primary" type="button">儲存 Webhook</button>
+              <span id="webhookHint" class="muted small"></span>
+            </div>
+            <div class="muted small">
+              完成後 payload 會包含 `docId`、`status`、`completedAt`、`signedDownloadUrl`。
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="/assets/dashboard.js"></script>
+  </body>
+</html>
+

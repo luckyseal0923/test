@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>簽名</title>
+    <link rel="stylesheet" href="/assets/shared.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.7/dist/signature_pad.umd.min.js"></script>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="topbar">
+        <div class="brand">
+          <div class="title">簽名者</div>
+          <div id="docPill" class="pill mono"></div>
+        </div>
+        <div class="pill"><b>提示</b> 點選橘色框開始簽名</div>
+      </div>
+
+      <div class="grid">
+        <div class="card">
+          <h2>PDF</h2>
+          <div class="row" style="justify-content:space-between">
+            <div class="row">
+              <button id="prevPage" class="btn" type="button">上一頁</button>
+              <button id="nextPage" class="btn" type="button">下一頁</button>
+              <div class="pill"><b>頁</b> <span id="pageInfo" class="mono"></span></div>
+            </div>
+            <div class="pill"><b>進度</b> <span id="progress" class="mono"></span></div>
+          </div>
+          <div class="hr"></div>
+          <div class="pdfStage">
+            <canvas id="pdfCanvas" class="pdfCanvas"></canvas>
+            <div id="overlay" class="overlay"></div>
+          </div>
+          <div class="muted small" style="margin-top:8px">
+            - 簽完後會自動儲存。全部必填完成後，發起人即可下載已簽名 PDF。<br />
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>待簽欄位</h2>
+          <div id="todoList" class="col"></div>
+          <div class="hr"></div>
+          <div id="doneHint" class="muted small"></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="sigMask" class="modalMask">
+      <div class="modal">
+        <h3 id="sigTitle">手寫簽名</h3>
+        <canvas id="sigCanvas" class="sigCanvas"></canvas>
+        <div class="row" style="margin-top:10px;justify-content:space-between">
+          <div class="row">
+            <button id="sigClear" class="btn" type="button">清除</button>
+          </div>
+          <div class="row">
+            <button id="sigCancel" class="btn" type="button">取消</button>
+            <button id="sigSave" class="btn ok" type="button">儲存</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="textMask" class="modalMask">
+      <div class="modal">
+        <h3 id="textTitle">文字欄位</h3>
+        <textarea id="textInput" rows="3" class="input" placeholder="請輸入文字"></textarea>
+        <div class="row" style="margin-top:10px;justify-content:flex-end">
+          <button id="textCancel" class="btn" type="button">取消</button>
+          <button id="textSave" class="btn ok" type="button">儲存</button>
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="/assets/sign.js"></script>
+  </body>
+</html>
+
