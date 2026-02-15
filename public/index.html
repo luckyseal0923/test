@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>遠端簽名 Web（MVP）</title>
+    <link rel="stylesheet" href="/assets/shared.css" />
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="topbar">
+        <div class="brand">
+          <div class="title">遠端簽名 Web</div>
+          <div class="badge">MVP</div>
+        </div>
+        <div class="pill"><b>流程</b> 上傳 → 拉框 → 分享 → 手機簽 → 下載</div>
+      </div>
+
+      <div class="grid">
+        <div class="card">
+          <h2>發起人：上傳 PDF</h2>
+          <form id="uploadForm" class="col">
+            <div class="col">
+              <label>PDF 檔案（≤ 25MB）</label>
+              <input class="input" type="file" name="pdf" accept="application/pdf,.pdf" required />
+            </div>
+            <div class="row">
+              <button class="btn primary" type="submit">上傳並產生連結</button>
+              <span id="uploadHint" class="muted small"></span>
+            </div>
+          </form>
+          <div class="hr"></div>
+          <div id="links" class="links"></div>
+        </div>
+
+        <div class="card">
+          <h2>說明</h2>
+          <div class="col">
+            <div class="muted small">
+              - 上傳後會給你三個連結：設定簽名框、簽名者連結、狀態看板/下載。<br />
+              - 設定簽名框（可多個、跨頁），儲存後直接把「簽名者連結」傳給同仁。<br />
+              - 簽名者用手機點選框即可手寫簽名（或輸入文字欄位）。<br />
+              - 全部必填欄位完成後會自動產出已簽名 PDF，可在狀態看板下載。<br />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="/assets/index.js"></script>
+  </body>
+</html>
+
