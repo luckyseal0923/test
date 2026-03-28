@@ -3,47 +3,123 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>遠端簽名 Web（MVP）</title>
+    <title>器材借用系統（MVP）</title>
     <link rel="stylesheet" href="/assets/shared.css" />
   </head>
   <body>
     <div class="wrap">
       <div class="topbar">
         <div class="brand">
-          <div class="title">遠端簽名 Web</div>
+          <div class="title">器材借用系統</div>
           <div class="badge">MVP</div>
         </div>
-        <div class="pill"><b>流程</b> 上傳 → 拉框 → 分享 → 手機簽 → 下載</div>
+        <div class="pill"><b>流程</b> 建立器材 → 借用登記 → 歸還</div>
       </div>
 
       <div class="grid">
         <div class="card">
-          <h2>發起人：上傳 PDF</h2>
-          <form id="uploadForm" class="col">
-            <div class="col">
-              <label>PDF 檔案（≤ 25MB）</label>
-              <input class="input" type="file" name="pdf" accept="application/pdf,.pdf" required />
+          <h2>系統概況</h2>
+          <div class="statsGrid">
+            <div class="statBox">
+              <div class="muted small">器材種類</div>
+              <div id="statEquipment" class="statValue mono">0</div>
             </div>
-            <div class="row">
-              <button class="btn primary" type="submit">上傳並產生連結</button>
-              <span id="uploadHint" class="muted small"></span>
+            <div class="statBox">
+              <div class="muted small">總庫存件數</div>
+              <div id="statStock" class="statValue mono">0</div>
             </div>
-          </form>
-          <div class="hr"></div>
-          <div id="links" class="links"></div>
-        </div>
-
-        <div class="card">
-          <h2>說明</h2>
-          <div class="col">
-            <div class="muted small">
-              - 上傳後會給你三個連結：設定簽名框、簽名者連結、狀態看板/下載。<br />
-              - 設定簽名框（可多個、跨頁），儲存後直接把「簽名者連結」傳給同仁。<br />
-              - 簽名者用手機點選框即可手寫簽名（或輸入文字欄位）。<br />
-              - 全部必填欄位完成後會自動產出已簽名 PDF，可在狀態看板下載。<br />
+            <div class="statBox">
+              <div class="muted small">借用中</div>
+              <div id="statBorrowed" class="statValue mono">0</div>
+            </div>
+            <div class="statBox">
+              <div class="muted small">可借件數</div>
+              <div id="statAvailable" class="statValue mono">0</div>
             </div>
           </div>
         </div>
+
+        <div class="card">
+          <h2>新增器材</h2>
+          <form id="equipmentForm" class="col">
+            <div class="row">
+              <div class="col" style="min-width: 240px; flex: 1">
+                <label>器材名稱 *</label>
+                <input id="eqName" class="input" required placeholder="例如：投影機 Epson EB-X06" />
+              </div>
+              <div class="col" style="width: 170px">
+                <label>庫存件數 *</label>
+                <input id="eqTotal" class="input" type="number" min="1" max="10000" value="1" required />
+              </div>
+            </div>
+            <div class="row">
+              <div class="col" style="min-width: 180px; flex: 1">
+                <label>分類</label>
+                <input id="eqCategory" class="input" placeholder="例如：視訊設備" />
+              </div>
+              <div class="col" style="min-width: 220px; flex: 1">
+                <label>存放位置</label>
+                <input id="eqLocation" class="input" placeholder="例如：資訊室 A 櫃" />
+              </div>
+            </div>
+            <div class="col">
+              <label>備註</label>
+              <textarea id="eqNote" class="input" rows="2" placeholder="器材描述、注意事項"></textarea>
+            </div>
+            <div class="row">
+              <button class="btn primary" type="submit">新增器材</button>
+              <span id="equipmentHint" class="muted small"></span>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top: 14px">
+        <h2>器材清單（點「借用」快速登記）</h2>
+        <div id="equipmentList" class="col"></div>
+      </div>
+
+      <div class="grid" style="margin-top: 14px">
+        <div class="card">
+          <h2>借用中</h2>
+          <div id="borrowedList" class="col"></div>
+        </div>
+        <div class="card">
+          <h2>已歸還紀錄（最近 100 筆）</h2>
+          <div id="historyList" class="col"></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="loanMask" class="modalMask">
+      <div class="modal">
+        <h3>借用登記</h3>
+        <div class="pill">器材：<b id="loanEquipmentName"></b></div>
+        <form id="loanForm" class="col" style="margin-top: 12px">
+          <div class="row">
+            <div class="col" style="min-width: 180px; flex: 1">
+              <label>借用人 *</label>
+              <input id="loanBorrower" class="input" required placeholder="姓名" />
+            </div>
+            <div class="col" style="min-width: 220px; flex: 1">
+              <label>聯絡方式</label>
+              <input id="loanContact" class="input" placeholder="電話或 email" />
+            </div>
+          </div>
+          <div class="col">
+            <label>用途</label>
+            <input id="loanPurpose" class="input" placeholder="例如：活動投影、會議簡報" />
+          </div>
+          <div class="col" style="max-width: 200px">
+            <label>預計歸還日</label>
+            <input id="loanReturnDate" class="input" type="date" />
+          </div>
+          <div class="row" style="justify-content: flex-end">
+            <button id="loanCancel" class="btn" type="button">取消</button>
+            <button id="loanSubmit" class="btn ok" type="submit">確認借用</button>
+          </div>
+          <span id="loanHint" class="muted small"></span>
+        </form>
       </div>
     </div>
 

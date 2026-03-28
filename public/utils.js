@@ -1,25 +1,3 @@
-export function qs(name) {
-  return new URLSearchParams(window.location.search).get(name);
-}
-
-export function mustToken() {
-  const token = qs('token') || '';
-  if (!token) throw new Error('Missing token');
-  return token;
-}
-
-export function getDocIdFromPath() {
-  const parts = window.location.pathname.split('/').filter(Boolean);
-  // /doc/:docId/config | /doc/:docId/dashboard | /sign/:docId
-  if (parts[0] === 'doc') return parts[1];
-  if (parts[0] === 'sign') return parts[1];
-  return null;
-}
-
-export function el(id) {
-  return document.getElementById(id);
-}
-
 export async function apiJson(url, opts = {}) {
   const res = await fetch(url, opts);
   const text = await res.text();
@@ -32,7 +10,25 @@ export async function apiJson(url, opts = {}) {
   return json;
 }
 
-export async function copyToClipboard(text) {
-  await navigator.clipboard.writeText(text);
+export function formatDateTime(input) {
+  if (!input) return '-';
+  const d = new Date(input);
+  if (Number.isNaN(d.getTime())) return String(input);
+  return d.toLocaleString('zh-TW', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit'
+  });
+}
+
+export function toDateInput(input) {
+  const d = input instanceof Date ? input : new Date(input);
+  if (Number.isNaN(d.getTime())) return '';
+  const yyyy = d.getFullYear();
+  const mm = String(d.getMonth() + 1).padStart(2, '0');
+  const dd = String(d.getDate()).padStart(2, '0');
+  return `${yyyy}-${mm}-${dd}`;
 }
 
