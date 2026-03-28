@@ -1,13 +1,13 @@
-# 遠端簽名 Web（MVP）
+# 器材借用 Web 系統（MVP）
 
-這是一個可跑通流程的 MVP：
+這是一個可直接跑的器材借用系統 MVP，支援：
 
-- 發起人上傳 PDF
-- 在 PDF 上拉框設定多個「簽名 / 文字」欄位（可跨頁）
-- 自動產生「簽名者連結」與「狀態看板/下載連結」
-- 簽名者用手機點框 → 手寫簽名或輸入文字 → 自動儲存
-- 必填欄位全部完成後，自動產出 **已簽名 PDF**，發起人可下載
-- 可選 **Webhook**：完成時自動 POST JSON 到指定網址
+- 新增器材（名稱、分類、庫存數、位置、備註）
+- 查看器材可借數（總庫存 / 借出中 / 可借）
+- 建立借用單（借用人、聯絡方式、用途、預計歸還日）
+- 辦理歸還（可填寫歸還狀態與備註）
+- 即時看板（器材數、總庫存、借用中、可借）
+- 借用中清單與已歸還歷史清單
 
 ## 需求
 
@@ -20,39 +20,37 @@ npm install
 npm start
 ```
 
-瀏覽 `http://localhost:3000/`
+開啟：`http://localhost:3000/`
 
 ## 環境變數（可選）
 
 - **PORT**：預設 `3000`
-- **BOARD_TOKEN**：啟用全域看板 API（`GET /api/board?token=...`）用的 token；未設定時會回 `board_disabled`
 
-## 資料儲存位置
+## 資料儲存
 
-所有資料都存在本機（未做雲端儲存）：
+資料存在本機 SQLite：
 
-- `data/app.db`：SQLite
-- `data/uploads/`：上傳的原始 PDF
-- `data/signatures/`：簽名 PNG
-- `data/signed/`：產出的已簽名 PDF
+- `data/app.db`
 
-## 安全性注意（重要）
+### 資料表
 
-目前採 **連結 token** 的簡化設計（token 具 bearer 權限）：
+- `equipments`：器材主檔
+- `loans`：借用 / 歸還紀錄
 
-- **請務必** 部署在內網/VPN 或加上 SSO/登入、HTTPS、存取控管
-- 未實作審計軌跡、身分驗證、IP 限制、到期時間、撤銷、加密儲存等醫療常見合規需求
+## 主要 API（MVP）
 
-## Webhook payload
+- `GET /api/summary`：統計資訊
+- `GET /api/equipments`：器材清單
+- `POST /api/equipments`：新增器材
+- `GET /api/loans?status=ALL|BORROWED|RETURNED&limit=100`
+- `POST /api/loans`：建立借用
+- `POST /api/loans/:loanId/return`：辦理歸還
 
-完成時會 POST：
+## 後續可擴充
 
-```json
-{
-  "docId": "xxxx",
-  "status": "COMPLETED",
-  "completedAt": "2026-02-15T00:00:00.000Z",
-  "signedDownloadUrl": "https://.../api/doc/xxxx/download/signed?token=..."
-}
-```
+- 帳號登入與權限（管理員 / 一般借用者）
+- 器材圖片與條碼/QR Code 借還
+- 預約流程（未借先預留）
+- 到期提醒（Email/Line/Slack）
+- 匯出報表（CSV/Excel）
 
